@@ -1,0 +1,55 @@
+{
+  "name": "tmodloader-mcp",
+  "version": "1.0.0",
+  "description": "MCP (Model Context Protocol) para auxiliar na criação de mods do TModLoader com melhores práticas",
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx watch src/index.ts",
+    "start": "node dist/index.js",
+    "server": "node server.js",
+    "test": "jest",
+    "lint": "eslint src/**/*.ts",
+    "format": "prettier --write src/**/*.ts",
+    "setup": "node scripts/setup.js",
+    "docker:build": "docker build -t tmodloader-mcp .",
+    "docker:run": "docker run -p 3000:3000 tmodloader-mcp",
+    "deploy:render": "render deploy",
+    "deploy:railway": "railway up",
+    "deploy:heroku": "git push heroku main"
+  },
+  "keywords": [
+    "tmodloader",
+    "terraria",
+    "mods",
+    "mcp",
+    "game-development"
+  ],
+  "author": "TModLoader MCP Team",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^0.4.0",
+    "axios": "^1.6.0",
+    "cheerio": "^1.0.0",
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "fs-extra": "^11.0.0",
+    "marked": "^9.0.0",
+    "path": "^0.12.7",
+    "tsx": "^4.0.0",
+    "typescript": "^5.0.0",
+    "youtube-transcript": "^1.0.0"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^11.0.0",
+    "@types/jest": "^29.5.14",
+    "@types/node": "^20.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.0.0",
+    "jest": "^29.0.0",
+    "prettier": "^3.0.0",
+    "ts-jest": "^29.4.0"
+  }
+}

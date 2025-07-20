@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "tmodloader": {
+      "command": "node",
+      "args": ["dist/index.js"],
+      "cwd": "/path/to/tmodloader-mcp",
+      "env": {
+        "NODE_ENV": "production"
+      }
+    }
+  }
+} 
