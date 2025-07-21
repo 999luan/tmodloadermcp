@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "tmodloader-github-pages": {
+      "command": "node",
+      "args": ["-e", "console.log(JSON.stringify({name: 'tmodloader-mcp', version: '1.0.0', capabilities: {tools: {}}}))"],
+      "env": {
+        "MCP_SERVER_URL": "https://[seu-usuario].github.io/tmodloader/mcp"
+      }
+    }
+  }
+} 
