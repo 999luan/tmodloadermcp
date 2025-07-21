@@ -17,7 +17,8 @@
     "docker:run": "docker run -p 3000:3000 tmodloader-mcp",
     "deploy:render": "render deploy",
     "deploy:railway": "railway up",
-    "deploy:heroku": "git push heroku main"
+    "deploy:heroku": "git push heroku main",
+    "deploy:vercel": "vercel --prod"
   },
   "keywords": [
     "tmodloader",

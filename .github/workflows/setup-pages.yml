@@ -1,0 +1,114 @@
+name: Setup GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  setup-pages:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Build project
+      run: npm run build
+      
+    - name: Create public directory
+      run: |
+        mkdir -p public
+        cp -r dist/* public/ 2>/dev/null || true
+        cp api/* public/ 2>/dev/null || true
+        
+    - name: Create index.html if not exists
+      run: |
+        if [ ! -f public/index.html ]; then
+          echo '<!DOCTYPE html>
+          <html>
+          <head>
+            <title>TModLoader MCP Server</title>
+            <meta charset="UTF-8">
+            <style>
+              body { font-family: Arial, sans-serif; margin: 40px; }
+              .container { max-width: 800px; margin: 0 auto; }
+              .status { background: #e8f5e8; padding: 20px; border-radius: 5px; }
+              .api-section { margin: 20px 0; }
+              .method { background: #f5f5f5; padding: 15px; margin: 10px 0; border-radius: 5px; }
+            </style>
+          </head>
+          <body>
+            <div class="container">
+              <h1>🚀 TModLoader MCP Server</h1>
+              <div class="status">
+                <h2>✅ Servidor Online</h2>
+                <p>MCP Server para desenvolvimento de mods TModLoader</p>
+                <p><strong>Versão:</strong> 1.0.0</p>
+              </div>
+              <div class="api-section">
+                <h2>🔧 Métodos Disponíveis</h2>
+                <div class="method">
+                  <h3>📚 get_tmodloader_documentation</h3>
+                  <p>Obter documentação e referências da API do TModLoader</p>
+                </div>
+                <div class="method">
+                  <h3>📖 get_tutorial_guide</h3>
+                  <p>Guias passo a passo para desenvolvimento de mods</p>
+                </div>
+                <div class="method">
+                  <h3>🎥 get_youtube_tutorials</h3>
+                  <p>Buscar tutoriais do TModLoader no YouTube</p>
+                </div>
+                <div class="method">
+                  <h3>⭐ get_best_practices</h3>
+                  <p>Melhores práticas e diretrizes para desenvolvimento</p>
+                </div>
+                <div class="method">
+                  <h3>🏗️ create_mod_structure</h3>
+                  <p>Gerar estrutura completa de projeto de mod</p>
+                </div>
+                <div class="method">
+                  <h3>🔍 analyze_mod_code</h3>
+                  <p>Analisar código de mod existente e sugerir melhorias</p>
+                </div>
+                <div class="method">
+                  <h3>⚙️ generate_mod_code</h3>
+                  <p>Gerar código de mod baseado em parâmetros</p>
+                </div>
+                <div class="method">
+                  <h3>📰 get_latest_tmodloader_info</h3>
+                  <p>Informações mais recentes sobre o TModLoader</p>
+                </div>
+                <div class="method">
+                  <h3>👥 get_community_patterns</h3>
+                  <p>Padrões da comunidade e melhores práticas</p>
+                </div>
+                <div class="method">
+                  <h3>🔄 get_latest_api_changes</h3>
+                  <p>Mudanças mais recentes na API do TModLoader</p>
+                </div>
+                <div class="method">
+                  <h3>📊 get_popular_mods_analysis</h3>
+                  <p>Análise de mods populares e seus padrões</p>
+                </div>
+              </div>
+            </div>
+          </body>
+          </html>' > public/index.html
+        fi
+        
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./public
+        force_orphan: true 

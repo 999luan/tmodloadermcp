@@ -270,8 +270,78 @@ class TModLoaderMCPServer {
     await this.server.connect(transport);
     console.error('TModLoader MCP Server started');
   }
+
+  // Método para lidar com requisições HTTP (usado pelo Vercel)
+  async handleRequest(method: string, params: any) {
+    try {
+      switch (method) {
+        case 'get_tmodloader_documentation':
+          return await this.tmodloaderAssistant.getDocumentation(params?.topic as string);
+        
+        case 'get_tutorial_guide':
+          return await this.tmodloaderAssistant.getTutorialGuide(
+            params?.tutorial_type as string,
+            params?.difficulty as string
+          );
+        
+        case 'get_best_practices':
+          return await this.tmodloaderAssistant.getBestPractices(params?.category as string);
+        
+        case 'create_mod_structure':
+          return await this.tmodloaderAssistant.createModStructure(
+            params?.mod_name as string,
+            params?.mod_type as string,
+            params?.features as string[]
+          );
+        
+        case 'analyze_mod_code':
+          return await this.tmodloaderAssistant.analyzeModCode(
+            params?.code as string,
+            params?.mod_type as string
+          );
+        
+        case 'generate_mod_code':
+          return await this.tmodloaderAssistant.generateModCode(
+            params?.feature as string,
+            params?.parameters as any
+          );
+        
+        case 'get_latest_tmodloader_info':
+          return await this.tmodloaderAssistant.getLatestTModLoaderInfo();
+        
+        case 'get_youtube_tutorials':
+          return await this.tmodloaderAssistant.getTutorialFromYouTube(
+            params?.query as string
+          );
+        
+        case 'get_community_patterns':
+          return await this.tmodloaderAssistant.getCommunityPatterns();
+        
+        case 'get_latest_api_changes':
+          return await this.tmodloaderAssistant.getLatestAPIChanges();
+        
+        case 'get_popular_mods_analysis':
+          return await this.tmodloaderAssistant.getPopularModsAnalysis();
+        
+        default:
+          throw new Error(`Unknown method: ${method}`);
+      }
+    } catch (error) {
+      return {
+        content: [
+          {
+            type: 'text',
+            text: `Error executing method ${method}: ${error instanceof Error ? error.message : String(error)}`,
+          },
+        ],
+      };
+    }
+  }
 }
 
 // Start the server
 const server = new TModLoaderMCPServer();
-server.run().catch(console.error); 
+server.run().catch(console.error);
+
+// Export for use in API routes
+export { TModLoaderMCPServer }; 

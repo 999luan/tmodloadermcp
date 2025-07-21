@@ -1,0 +1,47 @@
+name: API Handler
+
+on:
+  repository_dispatch:
+    types: [api_request]
+
+jobs:
+  handle-api-request:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Build project
+      run: npm run build
+      
+    - name: Process API request
+      run: |
+        node -e "
+        const { TModLoaderMCPServer } = await import('./dist/index.js');
+        const server = new TModLoaderMCPServer();
+        const method = '${{ github.event.client_payload.method }}';
+        const params = ${{ github.event.client_payload.params || '{}' }};
+        
+        try {
+          const result = await server.handleRequest(method, params);
+          console.log(JSON.stringify(result));
+        } catch (error) {
+          console.error('Error:', error.message);
+          process.exit(1);
+        }
+        "
+      id: api-result
+      
+    - name: Create response
+      run: |
+        echo '{"result": "${{ steps.api-result.outputs.result }}"}' > response.json 
